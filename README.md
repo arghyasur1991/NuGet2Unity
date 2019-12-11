@@ -33,6 +33,9 @@ Switch | Description
 ## Example
 Let's say you wanted to download and package the latest version of the [WindowsAzure.Storage NuGet package](https://www.nuget.org/packages/WindowsAzure.Storage) to a Unity package in the current directory.  Here's what that would look like (note the `--` argument which ensures the switches get passed to the app itself, not the dotnet command:
 
+## link.xml
+Please note that, by default, a link.xml file will be generated which preserves all namespaces from all assemblies in the NuGet package and its dependencies. This may lead to large projects and longer build times. If this is a problem, please use the --skiplinkxml switch and determine which assemblies and namespaces (if any) should be included and manually add them to your link.xml file.
+
 `dotnet run -- -n WindowsAzure.Storage`
 
 ## Packages
