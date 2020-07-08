@@ -4,8 +4,11 @@ namespace NuGet2Unity
 {
 	class Options
 	{
-		[Option('n', "nugetpackage", Required = true, HelpText = "NuGet package to repackage")]
+        [Option('n', "nugetpackage", Required = true, HelpText = "NuGet package to repackage")]
 		public string Package { get; set; }
+
+		[Option('i', "nugetpackagelocal", HelpText = "NuGet package to repackage")]
+		public string LocalPackage { get; set; }
 
 		[Option('v', "version", HelpText = "Version of NuGet package to use")]
 		public string Version { get; set; }

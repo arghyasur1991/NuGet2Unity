@@ -45,13 +45,13 @@ namespace NuGet2Unity
 
 			string downloadDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 			Directory.CreateDirectory(downloadDir);
-			ConsoleWriteLine($"Download directory: {downloadDir}", ConsoleColor.Gray, true);
+			ConsoleWriteLine($"Download directory: {downloadDir}", ConsoleColor.Gray);
 
 			string pluginsDir = Path.Combine(workingDir, "Assets", "Plugins");
 			Directory.CreateDirectory(pluginsDir);
-			ConsoleWriteLine($"Plugins dir: {pluginsDir}", Console.BackgroundColor, true);
+			ConsoleWriteLine($"Plugins dir: {pluginsDir}", ConsoleColor.White);
 
-			bool success = DownloadPackage(opt.Package, opt.Version, downloadDir);
+			bool success = DecompressPackage(opt.Package, opt.LocalPackage, downloadDir);
 			if(success)
 			{
 				string version = GetPackageVersion(downloadDir, opt.Package);
@@ -110,6 +110,29 @@ namespace NuGet2Unity
 					za.ExtractToDirectory(Path.Combine(temp, package));
 				}
 				catch(Exception)
+				{
+					ConsoleWriteError($"\nUnable to download/extract {package}");
+					return false;
+				}
+				ConsoleWriteLine("Complete", ConsoleColor.Green);
+			}
+			return true;
+		}
+
+		private static bool DecompressPackage(string package, string localPackagePath, string temp)
+		{
+            string path = Path.Combine(temp, package);
+			ConsoleWriteLine($"Path1: {path}", ConsoleColor.White);
+			if (!Directory.Exists(path))
+			{
+				try
+				{
+					byte[] buff = File.ReadAllBytes(Path.Combine(localPackagePath, package));
+					MemoryStream ms = new MemoryStream(buff);
+					ZipArchive za = new ZipArchive(ms);
+					za.ExtractToDirectory(Path.Combine(temp, package));
+				}
+				catch (Exception)
 				{
 					ConsoleWriteError($"\nUnable to download/extract {package}");
 					return false;
